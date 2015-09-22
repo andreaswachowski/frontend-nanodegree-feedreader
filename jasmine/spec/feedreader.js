@@ -4,6 +4,129 @@
  * all of the tests that will be run against your application.
  */
 
+/* Mock feed contents, to allow testing independent of the API
+ *
+ * The data has been retrieved 2015-09-22 from the Google API and
+ * can also serve to detect regressions against that API later on.
+ *
+ * Not all of the data is needed for the moment, but most has been kept for
+ * future use. The exception is the 'content' property, which is usually
+ * large and was emptied.
+ */
+mockFeedContents = [
+    {
+        "feedUrl": "http://blog.udacity.com/feeds/posts/default?alt=rss",
+        "title": "Udacity Blog",
+        "link": "http://blog.udacity.com/",
+        "author":"",
+        "description": "Advance your education and your career with project-based, self-paced online courses in tech.",
+        "type": "rss20",
+        "entries": [
+            {
+                "title": "4 Times Data Science Saved the Day",
+                "link": "http://blog.udacity.com/2014/12/4-times-data-science-saved-day_3.html",
+                "author": "noreply@blogger.com (Mark Nguyen)",
+                "publishedDate": "Wed, 03 Dec 2014 10:31:00 -0800",
+                "contentSnippet":"",
+                "content":"",
+                "categories": ["Data Science"]
+            },
+            {
+                "title": "Dawoon Choi: Golfer to Programmer",
+                "link": "http://blog.udacity.com/2014/11/student-stories-dawoon-choi-programmer.html",
+                "author": "noreply@blogger.com (ChiWei Ranck)",
+                "publishedDate": "Fri, 28 Nov 2014 07:26:00 -0800",
+                "contentSnippet": "",
+                "content": "",
+                "categories": ["front-end web dev", "Nanodegrees", "Student Stories"]
+            },
+            {
+                "title": "Data Analysts: What You'll Make and Where You'll Make It",
+                "link": "http://blog.udacity.com/2014/11/data-analysts-what-youll-make.html",
+                "author": "noreply@blogger.com (Allison Stadd)",
+                "publishedDate": "Wed, 26 Nov 2014 08:00:00 -0800",
+                "contentSnippet": "",
+                "content": "",
+                "categories": ["Careers", "Data Science"]
+            },
+            {
+                "title": "Informational Interviews: How to Find Your Next Job Over Coffee",
+                "link": "http://blog.udacity.com/2014/11/informational-interviews-how-to-find.html",
+                "author": "noreply@blogger.com (Allison Jones)",
+                "publishedDate": "Fri, 21 Nov 2014 08:50:00 -0800",
+                "contentSnippet": "",
+                "content": "",
+                "categories": ["Careers"]
+            }
+        ]
+    },
+    {
+        "feedUrl": "http://css-tricks.com/feed",
+        "title": "CSS-Tricks",
+        "link": "https://css-tricks.com",
+        "author": "",
+        "description": "Tips, Tricks, and Techniques on using Cascading Style Sheets.",
+        "type": "rss20",
+        "entries": [
+            {
+                "title": "Customising Cross-Browser Range Inputs with CSS and JavaScript",
+                "link": "https://css-tricks.com/custom-interactive-range-inputs/",
+                "author":"Guest Author",
+                "publishedDate": "Tue, 22 Sep 2015 05:57:12 -0700",
+                "contentSnippet": " The following is a guest post by Steven Estrella. Steven shared with me a technique for creating customized range inputs by ...",
+                "content": "",
+                "categories": ["Article"]
+            },
+            {
+                "title": "How To Do Knockout Text",
+                "link": "https://css-tricks.com/how-to-do-knockout-text/",
+                "author": "Chris Coyier",
+                "publishedDate": "Mon, 21 Sep 2015 07:11:48 -0700",
+                "contentSnippet": "There are a couple of ways to do knockout text (text that appears cut out, such that you can see a background behind it) on the ...",
+                "content": "",
+                "categories": ["Article"]
+            },
+            {
+                "title": "Discussion Around Ad Blocking",
+                "link": "https://css-tricks.com/discussion-around-ad-blocking/",
+                "author": "Chris Coyier",
+                "publishedDate": "Sat, 19 Sep 2015 07:48:23 -0700",
+                "contentSnippet": "The discussion has heated up with the drop of iOS 9 and its ability to run apps that block ads. That was just the spark for the ...",
+                "content": "",
+                "categories": ["Article"]
+            },
+            {
+                "title": "The Tools Designers Are Using Today",
+                "link": "http://tools.subtraction.com/",
+                "author": "Chris Coyier",
+                "publishedDate": "Fri, 18 Sep 2015 10:08:08 -0700",
+                "contentSnippet": "In the spirit of gathering data on tooling that's been going around, here's Khoi Vinh's data on design tools. No surprises this ...",
+                "content": "",
+                "categories": ["Link"]
+            }
+        ]
+    }
+];
+
+MockFeedLoader = function(feedUrl) {
+    this.feedUrl = feedUrl;
+};
+
+/* Works as the google feed load function, except it returns
+ * fixed, hardcoded data to avoid the actual API call
+ */
+MockFeedLoader.prototype.load = function(cb) {
+    var self=this;
+    var feedData = mockFeedContents.filter(function(feed) {
+        return feed.feedUrl === self.feedUrl;
+    })[0];
+
+    cb({
+        error: false,
+        feed: feedData
+    });
+};
+
 /* We're placing all of our tests within the $() function,
  * since some of these tests may require DOM elements. We want
  * to ensure they don't run until the DOM is ready.
@@ -84,18 +207,37 @@ $(function() {
 
     /* (13) A new test suite named "Initial Entries" */
     describe('Initial Entries', function() {
-        beforeEach(function(done) {
-            loadFeed(0,done);
+
+        describe('when retrieved from Google', function() {
+            beforeEach(function(done) {
+                $('.feed').empty();
+                loadFeed(0,done);
+            });
+
+            /* (14) Ensure there is at least a single .entry in the .feed
+             * container after loadFeed() completes.
+             */
+            it('contain at least one .entry inside .feed', function(done) {
+                expect($('.feed .entry').length).toBeGreaterThan(0);
+                done();
+            });
         });
 
+        describe('when focusing on the presentation', function() {
+            beforeEach(function(done) {
+                $('.feed').empty();
+                expect($('.feed .entry').length).toBe(0);
+                var feedIdx = 0;
+                spyOn(window,'getGoogleFeed').and.returnValue(new MockFeedLoader(allFeeds[feedIdx].url));
+                loadFeed(feedIdx,done);
+            });
 
-        /* (14) Ensure there is at least a single .entry in the .feed
-         * container after loadFeed() completes.
-         */
-        it('contain at least one .entry inside .feed', function(done) {
-            expect($('.feed .entry').length).toBeGreaterThan(0);
-            done();
-        });
+            it('are laid out in the ".feed .entry" in the HTML', function(done) {
+                expect($('.feed .entry').length).toBeGreaterThan(0);
+                done();
+            });
+    });
+
     });
 
     /* (15) A new test suite named "New Feed Selection" */

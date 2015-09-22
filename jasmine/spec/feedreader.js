@@ -27,46 +27,106 @@ $(function() {
         });
 
 
-        /* TODO: (8) Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a URL defined
+        /* FYI: Below, the numberings (8), (9), etc. correspond to the
+         * enumeration in the instructions on Udacity's website).
+         */
+
+        /* (8) Ensure that each feed in allFeeds has a URL defined
          * and that the URL is not empty.
          */
+        it('have a non-empty URL', function() {
+            allFeeds.forEach(function(feed) {
+                expect(feed.url).toBeDefined();
+                expect(feed.url.length).not.toBe(0);
+            });
+        });
 
 
-        /* TODO: (9) Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a name defined
+        /* (9) Ensure each feed in allFeeds has a name defined
          * and that the name is not empty.
          */
+        it('have a non-empty name', function() {
+            allFeeds.forEach(function(feed) {
+                expect(feed.name).toBeDefined();
+                expect(feed.name.length).not.toBe(0);
+            });
+        });
+
     });
 
+    /* (10) A new test suite named "The menu" */
+    describe('The menu', function() {
+        /* (11) Ensure the menu element is hidden by default. */
+        it('is hidden by default', function() {
+            var menuHidden = $('body.menu-hidden');
+            expect(menuHidden).toBeDefined();
+        });
 
-    /* TODO: (10) Write a new test suite named "The menu" */
-
-        /* TODO: (11) Write a test that ensures the menu element is
-         * hidden by default. You'll have to analyze the HTML and
-         * the CSS to determine how we're performing the
-         * hiding/showing of the menu element.
+        /* (12) Ensure the menu changes visibility when the menu icon
+         * is clicked.
          */
+        it('is toggled between visible and hidden on clicking the menu icon', function() {
+            var menuHidden;
 
-        /* TODO: (12) Write a test that ensures the menu changes
-         * visibility when the menu icon is clicked. This test
-         * should have two expectations: does the menu display when
-         * clicked and does it hide when clicked again.
+            // Show menu
+            $('.menu-icon-link').click();
+            menuHidden = $('body.menu-hidden');
+            expect(menuHidden).toBeDefined();
+            expect(menuHidden.length).toBe(0);
+
+            // Hide menu
+            $('.menu-icon-link').click();
+            menuHidden = $('body.menu-hidden');
+            expect(menuHidden).toBeDefined();
+            expect(menuHidden.length).toBe(1);
+        });
+    });
+
+    /* (13) A new test suite named "Initial Entries" */
+    describe('Initial Entries', function() {
+        beforeEach(function(done) {
+            loadFeed(0,done);
+        });
+
+
+        /* (14) Ensure there is at least a single .entry in the .feed
+         * container after loadFeed() completes.
          */
+        it('contain at least one .entry inside .feed', function(done) {
+            expect($('.feed .entry').length).toBeGreaterThan(0);
+            done();
+        });
+    });
 
-    /* TODO: (13) Write a new test suite named "Initial Entries" */
-
-        /* TODO: (14) Write a test that ensures when the loadFeed
-         * function is called and completes its work, there is at least
-         * a single .entry element within the .feed container.
-         * Remember, loadFeed() is asynchronous so this test wil require
-         * the use of Jasmine's beforeEach and asynchronous done() function.
+    /* (15) A new test suite named "New Feed Selection" */
+    describe('New Feed Selection', function() {
+        /* (16) Ensure when a new feed is loaded by the loadFeed function
+         * that the content actually changes.
          */
+        var firstEntryOfFirstFeed, firstEntryOfSecondFeed;
 
-    /* TODO: (15) Write a new test suite named "New Feed Selection"
+        beforeEach(function(done) {
+            loadFeed(0,function() {
+                // The feed contains at least one entry, as guaranteed by
+                // test (14)
+                // Extract the heading text of this entry:
+                firstEntryOfFirstFeed = $('.feed .entry h2')[0].innerText;
 
-        /* TODO: (16) Write a test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
-         */
+                // Do the same, this time with feed 1:
+                loadFeed(1, function() {
+                    firstEntryOfSecondFeed = $('.feed .entry h2')[0].innerText;
+                    done();
+                });
+            });
+        });
+
+        it('changes the content displayed', function(done) {
+            // To be clear, just comparing only the headings of the first
+            // entries of the feeds is not a 100% guarantee that the feeds
+            // are different. But in all likelihood this condition should be
+            // sufficient.
+            expect(firstEntryOfFirstFeed).not.toBe(firstEntryOfSecondFeed);
+            done();
+        });
+    });
 }());

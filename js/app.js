@@ -32,6 +32,12 @@ function init() {
     loadFeed(0);
 }
 
+/* Returns a google.feeds.Feed object corresponding to the given URL.
+ */
+function getGoogleFeed(feedUrl) {
+    return new google.feeds.Feed(feedUrl);
+}
+
 /* This function performs everything necessary to load a
  * feed using the Google Feed Reader API. It will then
  * perform all of the DOM operations required to display
@@ -43,7 +49,7 @@ function init() {
 function loadFeed(id, cb) {
     var feedUrl = allFeeds[id].url,
         feedName = allFeeds[id].name,
-        feed = new google.feeds.Feed(feedUrl);
+        feed = getGoogleFeed(feedUrl);
 
     /* Load the feed using the Google Feed Reader API.
      * Once the feed has been loaded, the callback function

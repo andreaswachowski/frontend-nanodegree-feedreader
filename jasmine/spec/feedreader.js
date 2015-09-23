@@ -256,18 +256,25 @@ $(function() {
         /* (16) Ensure when a new feed is loaded by the loadFeed function
          * that the content actually changes.
          */
-        var firstEntryOfFirstFeed, firstEntryOfSecondFeed;
+        var firstEntryOfOneFeed, firstEntryOfADifferentFeed;
 
         beforeEach(function(done) {
-            loadFeed(0,function() {
+            var feed1 = 0, feed2 = 1;
+
+            // Make sure the URLs are different, so the likelihood of
+            // retrieving different results is maximized.
+            // (also, if this ever changes, debugging should be faster)
+            expect(allFeeds[feed1].url).not.toBe(allFeeds[feed2].url);
+
+            loadFeed(feed1,function() {
                 // The feed contains at least one entry, as guaranteed by
                 // test (14)
                 // Extract the heading text of this entry:
-                firstEntryOfFirstFeed = $('.feed .entry h2')[0].innerText;
+                firstEntryOfOneFeed = $('.feed .entry h2')[0].innerText;
 
                 // Do the same, this time with feed 1:
-                loadFeed(1, function() {
-                    firstEntryOfSecondFeed = $('.feed .entry h2')[0].innerText;
+                loadFeed(feed2, function() {
+                    firstEntryOfADifferentFeed = $('.feed .entry h2')[0].innerText;
                     done();
                 });
             });
@@ -278,7 +285,7 @@ $(function() {
             // entries of the feeds is not a 100% guarantee that the feeds
             // are different. But in all likelihood this condition should be
             // sufficient.
-            expect(firstEntryOfFirstFeed).not.toBe(firstEntryOfSecondFeed);
+            expect(firstEntryOfOneFeed).not.toBe(firstEntryOfADifferentFeed);
             done();
         });
     });

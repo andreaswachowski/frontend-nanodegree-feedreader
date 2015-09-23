@@ -4,6 +4,19 @@
  * all of the tests that will be run against your application.
  */
 
+/**
+ * A Mock for google.feeds.Feed
+ *
+ * It stubs out just enough of google.feeds.Feed that it can be used to test
+ * loadFeed without actually accessing the Google API.
+ *
+ * The mock is DOM-independent and can therefore be defined outside
+ * the $() function.
+ */
+MockFeedLoader = function(feedUrl) {
+    this.feedUrl = feedUrl;
+};
+
 /* Mock feed contents, to allow testing independent of the API
  *
  * The data has been retrieved on 2015-09-22 from the Google API.
@@ -15,7 +28,7 @@
  * large and was emptied.
  *
  */
-mockFeedContents = [
+MockFeedLoader.feedContents = [
     {
         "feedUrl": "http://blog.udacity.com/feeds/posts/default?alt=rss",
         "title": "Udacity Blog",
@@ -110,25 +123,12 @@ mockFeedContents = [
     }
 ];
 
-/**
- * A Mock for google.feeds.Feed
- *
- * It stubs out just enough of google.feeds.Feed that it can be used to test
- * loadFeed without actually accessing the Google API.
- *
- * The mock is DOM-independent and can therefore be defined outside
- * the $() function.
- */
-MockFeedLoader = function(feedUrl) {
-    this.feedUrl = feedUrl;
-};
-
 /* Works as the google feed load function, except it returns
  * fixed, hardcoded data to avoid the actual API call
  */
 MockFeedLoader.prototype.load = function(cb) {
     var self=this;
-    var feedData = mockFeedContents.filter(function(feed) {
+    var feedData = MockFeedLoader.feedContents.filter(function(feed) {
         return feed.feedUrl === self.feedUrl;
     })[0];
 

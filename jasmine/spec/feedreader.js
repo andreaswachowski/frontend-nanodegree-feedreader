@@ -6,12 +6,14 @@
 
 /* Mock feed contents, to allow testing independent of the API
  *
- * The data has been retrieved 2015-09-22 from the Google API and
- * can also serve to detect regressions against that API later on.
+ * The data has been retrieved on 2015-09-22 from the Google API.
+ * It (specifically, its format) could also serve to detect regressions
+ * against that API later on.
  *
  * Not all of the data is needed for the moment, but most has been kept for
  * future use. The exception is the 'content' property, which is usually
  * large and was emptied.
+ *
  */
 mockFeedContents = [
     {
@@ -108,6 +110,15 @@ mockFeedContents = [
     }
 ];
 
+/**
+ * A Mock for google.feeds.Feed
+ *
+ * It stubs out just enough of google.feeds.Feed that it can be used to test
+ * loadFeed without actually accessing the Google API.
+ *
+ * The mock is DOM-independent and can therefore be defined outside
+ * the $() function.
+ */
 MockFeedLoader = function(feedUrl) {
     this.feedUrl = feedUrl;
 };

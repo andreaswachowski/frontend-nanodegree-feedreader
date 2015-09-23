@@ -289,4 +289,23 @@ $(function() {
             done();
         });
     });
+
+    describe('The current feed\'s title', function() {
+        var feedIdx = 1;
+
+        beforeEach(function(done) {
+            spyOn(window,'getGoogleFeed').and.returnValue(new MockFeedLoader(allFeeds[feedIdx].url));
+            loadFeed(feedIdx,done);
+        });
+
+        it('is initialized from the API and displayed in .header-title', function(done) {
+            // The feed's title is currently *not* taken from the result of
+            // the API call (returning "CSS-Tricks"), but from the hardcoded
+            // allFeeds data (yielding "CSS Tricks", without hyphen)
+
+            expect($('.header-title')[0].html()).toBe(MockFeedLoader.feedContents[feedIdx].title);
+
+            done();
+        });
+    });
 }());

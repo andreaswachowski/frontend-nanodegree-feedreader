@@ -270,11 +270,11 @@ $(function() {
                 // The feed contains at least one entry, as guaranteed by
                 // test (14)
                 // Extract the heading text of this entry:
-                firstEntryOfOneFeed = $('.feed .entry h2')[0].innerText;
+                firstEntryOfOneFeed = $('.feed .entry h2').first().html();
 
                 // Do the same, this time with feed 1:
                 loadFeed(feed2, function() {
-                    firstEntryOfADifferentFeed = $('.feed .entry h2')[0].innerText;
+                    firstEntryOfADifferentFeed = $('.feed .entry h2').first().html();
                     done();
                 });
             });
@@ -303,7 +303,7 @@ $(function() {
             // the API call (returning "CSS-Tricks"), but from the hardcoded
             // allFeeds data (yielding "CSS Tricks", without hyphen)
 
-            expect($('.header-title')[0].html()).toBe(MockFeedLoader.feedContents[feedIdx].title);
+            expect($('.header-title').first().html()).toBe(MockFeedLoader.feedContents[feedIdx].title);
 
             done();
         });

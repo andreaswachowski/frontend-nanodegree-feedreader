@@ -198,7 +198,7 @@ $(function() {
         /* (12) Ensure the menu changes visibility when the menu icon
          * is clicked.
          */
-        xit('is toggled between visible and hidden on clicking the menu icon', function() {
+        it('is toggled between visible and hidden on clicking the menu icon', function() {
             var menuHidden;
 
             // Show menu

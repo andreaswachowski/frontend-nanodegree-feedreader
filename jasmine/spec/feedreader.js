@@ -228,9 +228,8 @@ $(function() {
             /* (14) Ensure there is at least a single .entry in the .feed
              * container after loadFeed() completes.
              */
-            it('contain at least one .entry inside .feed', function(done) {
+            it('contain at least one .entry inside .feed', function() {
                 expect($('.feed .entry').length).toBeGreaterThan(0);
-                done();
             });
         });
 
@@ -243,9 +242,8 @@ $(function() {
                 loadFeed(feedIdx,done);
             });
 
-            it('are laid out in the ".feed .entry" in the HTML', function(done) {
+            it('are laid out in the ".feed .entry" in the HTML', function() {
                 expect($('.feed .entry').length).toBeGreaterThan(0);
-                done();
             });
     });
 
@@ -280,13 +278,12 @@ $(function() {
             });
         });
 
-        it('changes the content displayed', function(done) {
+        it('changes the content displayed', function() {
             // To be clear, just comparing only the headings of the first
             // entries of the feeds is not a 100% guarantee that the feeds
             // are different. But in all likelihood this condition should be
             // sufficient.
             expect(firstEntryOfOneFeed).not.toBe(firstEntryOfADifferentFeed);
-            done();
         });
     });
 
@@ -298,14 +295,12 @@ $(function() {
             loadFeed(feedIdx,done);
         });
 
-        it('is initialized from the API and displayed in .header-title', function(done) {
+        it('is initialized from the API and displayed in .header-title', function() {
             // The feed's title is currently *not* taken from the result of
             // the API call (returning "CSS-Tricks"), but from the hardcoded
             // allFeeds data (yielding "CSS Tricks", without hyphen)
 
             expect($('.header-title').first().html()).toBe(MockFeedLoader.feedContents[feedIdx].title);
-
-            done();
         });
     });
 }());

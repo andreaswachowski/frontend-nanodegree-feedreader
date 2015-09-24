@@ -15,6 +15,16 @@ In addition to the required tests, I implemented:
   hardcoded `allFeeds` data.  I (as imaginary product owner) would rather
   have it to be retrieved from the API data.
 
+# Installation and Execution
+
+Simple: Clone this repository, and open `index.html` in a browser.
+
+You should see something analogous to the following (the feed content might be different, and note the canvas was scrolled to
+show the Jasmine results, including the intentional failure):
+
+<img src="https://github.com/andreaswachowski/frontend-nanodegree-feedreader/blob/master/screenshot.png" height=auto width="100%">
+
+
 # Resources
 * [Jasmine](http://jasmine.github.io/)
 * [Original project](http://github.com/udacity/frontend-nanodegree-feedreader) (from which this one is forked).

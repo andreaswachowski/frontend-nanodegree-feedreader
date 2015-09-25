@@ -240,7 +240,7 @@ $(function() {
             it('are laid out in the ".feed .entry" in the HTML', function() {
                 expect($('.feed .entry').length).toBeGreaterThan(0);
             });
-    });
+        });
 
     });
 

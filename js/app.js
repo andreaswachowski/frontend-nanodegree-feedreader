@@ -12,7 +12,7 @@ var allFeeds = [
         name: 'Udacity Blog',
         url: 'http://blog.udacity.com/feeds/posts/default?alt=rss'
     }, {
-        name: 'CSS Tricks',
+        name: 'CSS Tricks (as hardcoded in variable allFeeds)',
         url: 'http://css-tricks.com/feed'
     }, {
         name: 'HTML5 Rocks',

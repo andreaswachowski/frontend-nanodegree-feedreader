@@ -127,7 +127,7 @@ MockFeedLoader.feedContents = [
  * fixed, hardcoded data to avoid the actual API call
  */
 MockFeedLoader.prototype.load = function(cb) {
-    var self=this;
+    var self = this;
     var feedData = MockFeedLoader.feedContents.filter(function(feed) {
         return feed.feedUrl === self.feedUrl;
     })[0];
@@ -217,7 +217,7 @@ $(function() {
         describe('when retrieved from Google', function() {
             beforeEach(function(done) {
                 $('.feed').empty();
-                loadFeed(0,done);
+                loadFeed(0, done);
             });
 
             /* (14) Ensure there is at least a single .entry in the .feed
@@ -233,8 +233,8 @@ $(function() {
                 $('.feed').empty();
                 expect($('.feed .entry').length).toBe(0);
                 var feedIdx = 0;
-                spyOn(window,'getGoogleFeed').and.returnValue(new MockFeedLoader(allFeeds[feedIdx].url));
-                loadFeed(feedIdx,done);
+                spyOn(window, 'getGoogleFeed').and.returnValue(new MockFeedLoader(allFeeds[feedIdx].url));
+                loadFeed(feedIdx, done);
             });
 
             it('are laid out in the ".feed .entry" in the HTML', function() {
@@ -259,7 +259,7 @@ $(function() {
             // (also, if this ever changes, debugging should be faster)
             expect(allFeeds[feed1].url).not.toBe(allFeeds[feed2].url);
 
-            loadFeed(feed1,function() {
+            loadFeed(feed1, function() {
                 feed1contents = $('.feed').html();
 
                 // Do the same, this time with feed 1:
@@ -279,8 +279,8 @@ $(function() {
         var feedIdx = 1;
 
         beforeEach(function(done) {
-            spyOn(window,'getGoogleFeed').and.returnValue(new MockFeedLoader(allFeeds[feedIdx].url));
-            loadFeed(feedIdx,done);
+            spyOn(window, 'getGoogleFeed').and.returnValue(new MockFeedLoader(allFeeds[feedIdx].url));
+            loadFeed(feedIdx, done);
         });
 
         it('is initialized from the API and displayed in .header-title', function() {
